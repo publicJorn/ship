@@ -1,5 +1,7 @@
+import { MovingPhysical } from './MovingPhysical'
+
 // Ship constants
-// Internalize when we get multiple types of ships
+// Internalize when we get multiple ship types
 const maxForwardSpeed = 3.2
 const maxBackwardSpeed = -1.8
 const acceleratePower = 0.65
@@ -16,15 +18,12 @@ const rotationSpeed = 2
  * @param {string} stroke
  * @param {string} fill
  */
-export class Ship {
-  constructor({ x, y, direction = 0, stroke, fill, scale = 1 }) {
-    this.x = x
-    this.y = y
-    this.scale = scale
-    this.direction = direction - 90
+export class Ship extends MovingPhysical {
+  constructor({ direction = -90, stroke, fill, ...props }) {
+    super({ direction, ...props })
+
     this.stroke = stroke
     this.fill = fill
-    this.velocity = 0
   }
 
   /**
@@ -53,24 +52,7 @@ export class Ship {
       this.velocity = Math.min(0, this.velocity + drag)
     }
 
-    const rad = (this.direction * Math.PI) / 180
-    let x = this.x + this.velocity * Math.cos(rad)
-    let y = this.y + this.velocity * Math.sin(rad)
-
-    if (x < 0) {
-      x = x + maxWidth
-    } else if (x > maxWidth) {
-      x = x - maxWidth
-    }
-
-    if (y < 0) {
-      y = y + maxHeight
-    } else if (y > maxHeight) {
-      y = y - maxHeight
-    }
-
-    this.x = x
-    this.y = y
+    super.update({ maxWidth, maxHeight })
   }
 
   /**

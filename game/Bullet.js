@@ -1,3 +1,5 @@
+import { MovingPhysical } from './MovingPhysical'
+
 /**
  * Bullet fired by a ship
  * @param {number} x
@@ -8,27 +10,22 @@
  * @param {number} velocity
  * @param {number} range
  */
-export class Bullet {
+export class Bullet extends MovingPhysical {
   constructor({
-    x,
-    y,
-    size = 1.25,
-    scale = 1,
-    color,
-    direction,
-    owner,
     velocity = 5.5,
+    size = 1.25,
+    owner,
+    color,
     range = 350,
+    ...props
   }) {
-    this.x = x
-    this.y = y
+    super({ velocity, ...props })
+
     this.size = size
-    this.scale = scale
-    this.color = color
-    this.direction = direction
     this.owner = owner
-    this.velocity = velocity
+    this.color = color
     this.range = range
+
     this.moved = 0
     this.delete = false
   }
@@ -37,24 +34,8 @@ export class Bullet {
    * Update bullet props as it moves
    */
   update({ maxWidth, maxHeight }) {
-    const rad = (this.direction * Math.PI) / 180
-    let x = this.x + this.velocity * Math.cos(rad)
-    let y = this.y + this.velocity * Math.sin(rad)
+    super.update({ maxWidth, maxHeight })
 
-    if (x < 0) {
-      x = x + maxWidth
-    } else if (x > maxWidth) {
-      x = x - maxWidth
-    }
-
-    if (y < 0) {
-      y = y + maxHeight
-    } else if (y > maxHeight) {
-      y = y - maxHeight
-    }
-
-    this.x = x
-    this.y = y
     this.moved += this.velocity
 
     // extra
