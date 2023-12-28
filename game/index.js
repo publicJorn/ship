@@ -7,9 +7,9 @@ import { Bullet } from './Bullet'
 // - remove all debug stuff from build
 //
 export const game = (canvas) => {
-  const debug = false
+  const debug = true
   const ctx = canvas.getContext('2d')
-  const size = 4
+  const scale = 4
 
   const players = new Map()
   const bullets = new Set()
@@ -23,6 +23,7 @@ export const game = (canvas) => {
         new Bullet({
           x: player.ship.x,
           y: player.ship.y,
+          scale,
           color: player.color.stroke,
           direction: player.ship.direction,
           owner: player,
@@ -40,6 +41,7 @@ export const game = (canvas) => {
       y: 300,
       stroke: player1.color.stroke,
       fill: player1.color.fill,
+      scale,
     })
   )
 
@@ -65,7 +67,7 @@ export const game = (canvas) => {
         maxWidth: canvas.width,
         maxHeight: canvas.height,
       })
-      player.ship.draw({ ctx, size, debug })
+      player.ship.draw({ ctx, debug })
     })
 
     bullets.forEach((bullet) => {
@@ -73,7 +75,7 @@ export const game = (canvas) => {
         bullets.delete(bullet)
       }
       bullet.update({ maxWidth: canvas.width, maxHeight: canvas.height })
-      bullet.draw({ ctx, size })
+      bullet.draw({ ctx, debug })
     })
 
     window.requestAnimationFrame(loop)

@@ -17,9 +17,10 @@ const rotationSpeed = 2
  * @param {string} fill
  */
 export class Ship {
-  constructor({ x, y, direction = 0, stroke, fill }) {
+  constructor({ x, y, direction = 0, stroke, fill, scale = 1 }) {
     this.x = x
     this.y = y
+    this.scale = scale
     this.direction = direction - 90
     this.stroke = stroke
     this.fill = fill
@@ -75,10 +76,11 @@ export class Ship {
   /**
    * Draw to cnavas
    * @param {2dContext} ctx
-   * @param {number} size
+   * @param {boolean} debug
    */
-  draw({ ctx, size, debug }) {
+  draw({ ctx, debug = false }) {
     const rad = ((this.direction + 90) * Math.PI) / 180
+    const lineWidth = 1 * this.scale
 
     ctx.save()
 
@@ -86,12 +88,12 @@ export class Ship {
     ctx.rotate(rad)
 
     ctx.beginPath()
-    ctx.moveTo(0, -5 * size)
-    ctx.lineTo(-4 * size, 5 * size)
-    ctx.lineTo(4 * size, 5 * size)
+    ctx.moveTo(0, -5 * this.scale)
+    ctx.lineTo(-4 * this.scale, 5 * this.scale)
+    ctx.lineTo(4 * this.scale, 5 * this.scale)
     ctx.closePath()
 
-    ctx.lineWidth = 1 * size
+    ctx.lineWidth = lineWidth
     ctx.strokeStyle = this.stroke
     ctx.fillStyle = this.fill
 
@@ -99,10 +101,18 @@ export class Ship {
     ctx.stroke()
 
     if (debug) {
+      ctx.fillStyle = 'rgb(220, 20, 20)'
+      ctx.strokeStyle = 'rgb(220, 20, 20)'
+      ctx.lineWidth = 1
       ctx.beginPath()
       ctx.arc(0, 0, 3, 0, 2 * Math.PI)
-      ctx.fillStyle = 'rgb(220, 20, 20)'
       ctx.fill()
+      ctx.strokeRect(
+        -4 * this.scale - lineWidth / 2,
+        -5 * this.scale - lineWidth / 2,
+        8 * this.scale + lineWidth,
+        10 * this.scale + lineWidth
+      )
     }
     ctx.restore()
   }

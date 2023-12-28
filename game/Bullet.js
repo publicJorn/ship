@@ -9,9 +9,21 @@
  * @param {number} range
  */
 export class Bullet {
-  constructor({ x, y, color, direction, owner, velocity = 5.5, range = 350 }) {
+  constructor({
+    x,
+    y,
+    size = 1.25,
+    scale = 1,
+    color,
+    direction,
+    owner,
+    velocity = 5.5,
+    range = 350,
+  }) {
     this.x = x
     this.y = y
+    this.size = size
+    this.scale = scale
     this.color = color
     this.direction = direction
     this.owner = owner
@@ -54,13 +66,20 @@ export class Bullet {
   /**
    * Draw to cnavas
    * @param {2dContext} ctx
-   * @param {number} size
+   * @param {boolean} debug
    */
-  draw({ ctx, size = 1 }) {
+  draw({ ctx, debug = false }) {
+    const radius = this.size * this.scale
+
     ctx.beginPath()
-    // ctx.globalAlpha = this.alpha
-    ctx.arc(this.x, this.y, 1.25 * size, 0, 2 * Math.PI)
+    ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI)
     ctx.fillStyle = this.color
     ctx.fill()
+
+    if (debug) {
+      ctx.strokeStyle = 'rgb(220, 20, 20)'
+      ctx.lineWidth = 1
+      ctx.strokeRect(this.x - radius, this.y - radius, radius * 2, radius * 2)
+    }
   }
 }
