@@ -2,6 +2,7 @@ import { Input } from './Input'
 import { Player } from './Player'
 import { Ship } from './Ship'
 import { Bullet } from './Bullet'
+import { ObjectX } from './ObjectX'
 
 // TODO: before prod
 // - remove all debug stuff from build
@@ -13,6 +14,7 @@ export const game = (canvas) => {
 
   const players = new Map()
   const bullets = new Set()
+  const staticObjects = new Set()
 
   const input1 = new Input({ debug })
   input1.setKey({
@@ -44,8 +46,9 @@ export const game = (canvas) => {
       scale,
     })
   )
-
   players.set('player1', player1)
+
+  staticObjects.add(new ObjectX({ x: 400, y: 150, scale }))
 
   // Input
   window.addEventListener('keydown', (evt) => {
@@ -67,15 +70,34 @@ export const game = (canvas) => {
         maxWidth: canvas.width,
         maxHeight: canvas.height,
       })
-      player.ship.draw({ ctx, debug })
     })
-
     bullets.forEach((bullet) => {
       if (bullet.remove) {
         bullets.delete(bullet)
       }
       bullet.update({ maxWidth: canvas.width, maxHeight: canvas.height })
+    })
+    staticObjects.forEach((obj) => {
+      obj.update()
+    })
+
+    players.forEach((player) => {
+      for (let obj of staticObjects) {
+        if (player.ship.basicCollidesWith(obj)) {
+          player.ship.isColliding = true
+          obj.isColliding = true
+        }
+      }
+    })
+
+    players.forEach((player) => {
+      player.ship.draw({ ctx, debug })
+    })
+    bullets.forEach((bullet) => {
       bullet.draw({ ctx, debug })
+    })
+    staticObjects.forEach((obj) => {
+      obj.draw({ ctx, debug })
     })
 
     window.requestAnimationFrame(loop)

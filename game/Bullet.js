@@ -17,15 +17,17 @@ export class Bullet extends MovingPhysical {
     owner,
     color,
     range = 350,
+    scale,
     ...props
   }) {
-    super({ velocity, ...props })
+    const square = size * scale * 2
 
-    this.size = size
+    super({ velocity, width: square, height: square, ...props })
+
+    this.size = square
     this.owner = owner
     this.color = color
     this.range = range
-
     this.moved = 0
     this.delete = false
   }
@@ -50,7 +52,7 @@ export class Bullet extends MovingPhysical {
    * @param {boolean} debug
    */
   draw({ ctx, debug = false }) {
-    const radius = this.size * this.scale
+    const radius = this.size / 2
 
     ctx.beginPath()
     ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI)
@@ -60,7 +62,7 @@ export class Bullet extends MovingPhysical {
     if (debug) {
       ctx.strokeStyle = 'rgb(220, 20, 20)'
       ctx.lineWidth = 1
-      ctx.strokeRect(this.x - radius, this.y - radius, radius * 2, radius * 2)
+      ctx.strokeRect(this.x - radius, this.y - radius, this.width, this.height)
     }
   }
 }

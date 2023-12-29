@@ -2,11 +2,11 @@ import { MovingPhysical } from './MovingPhysical'
 
 // Ship constants
 // Internalize when we get multiple ship types
-const maxForwardSpeed = 3.2
-const maxBackwardSpeed = -1.8
-const acceleratePower = 0.65
+const maxForwardSpeed = 2.2
+const maxBackwardSpeed = -1.6
+const acceleratePower = 0.35
 const brakePower = 0.2
-const drag = 0.02
+const drag = 0.018
 const rotationSpeed = 2
 
 /**
@@ -19,11 +19,17 @@ const rotationSpeed = 2
  * @param {string} fill
  */
 export class Ship extends MovingPhysical {
-  constructor({ direction = -90, stroke, fill, ...props }) {
-    super({ direction, ...props })
+  constructor({ direction = -90, stroke, fill, scale, ...props }) {
+    super({ direction, scale, ...props })
 
+    this.lineWidth = 1 * scale
     this.stroke = stroke
     this.fill = fill
+
+    this.calcHitBoxBasicRadius({
+      outerWidth: 8 * scale + this.lineWidth,
+      outerHeight: 10 * scale + 2, // + stroke miter
+    })
   }
 
   /**
@@ -62,7 +68,6 @@ export class Ship extends MovingPhysical {
    */
   draw({ ctx, debug = false }) {
     const rad = ((this.direction + 90) * Math.PI) / 180
-    const lineWidth = 1 * this.scale
 
     ctx.save()
 
@@ -70,12 +75,12 @@ export class Ship extends MovingPhysical {
     ctx.rotate(rad)
 
     ctx.beginPath()
-    ctx.moveTo(0, -5 * this.scale)
-    ctx.lineTo(-4 * this.scale, 5 * this.scale)
-    ctx.lineTo(4 * this.scale, 5 * this.scale)
+    ctx.moveTo(0, -5.5 * this.scale)
+    ctx.lineTo(-4 * this.scale, 4.5 * this.scale)
+    ctx.lineTo(4 * this.scale, 4.5 * this.scale)
     ctx.closePath()
 
-    ctx.lineWidth = lineWidth
+    ctx.lineWidth = this.lineWidth
     ctx.strokeStyle = this.stroke
     ctx.fillStyle = this.fill
 
@@ -84,18 +89,13 @@ export class Ship extends MovingPhysical {
 
     if (debug) {
       ctx.fillStyle = 'rgb(220, 20, 20)'
-      ctx.strokeStyle = 'rgb(220, 20, 20)'
-      ctx.lineWidth = 1
       ctx.beginPath()
       ctx.arc(0, 0, 3, 0, 2 * Math.PI)
       ctx.fill()
-      ctx.strokeRect(
-        -4 * this.scale - lineWidth / 2,
-        -5 * this.scale - lineWidth / 2,
-        8 * this.scale + lineWidth,
-        10 * this.scale + lineWidth
-      )
     }
+
     ctx.restore()
+
+    super.draw({ ctx, debug })
   }
 }
