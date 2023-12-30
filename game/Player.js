@@ -1,8 +1,9 @@
 export class Player {
   constructor() {
+    // TODO: new color function to automatically determine stroke based on fill input
     this.color = { stroke: 'rgb(11, 162, 170)', fill: 'rgb(100, 202, 207)' }
-    this.ship = null
     this.input = null
+    this.ship = null
   }
 
   setColor({ stroke, fill }) {
@@ -14,7 +15,7 @@ export class Player {
     this.input = input
   }
 
-  createShip(ship) {
+  setShip(ship) {
     this.ship = ship
   }
 }

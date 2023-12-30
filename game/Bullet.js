@@ -2,6 +2,8 @@ import { MovingPhysical } from './MovingPhysical'
 
 /**
  * Bullet fired by a ship
+ * TODO: bullets are based on ship
+ * TODO: bullets can be affected by powerups, which are player owned
  * @param {number} x
  * @param {number} y
  * @param {string} color

@@ -34,23 +34,23 @@ export class Ship extends MovingPhysical {
 
   /**
    * Update ship props based on player input
-   * @param {{ left: boolean, right: boolean, accelerating: boolean, braking: boolean }} input
+   * @param {{ left: Key, right: Key, forward: Key, reverse: Key }} input
    * @param {number} maxWidth
    * @param {number} maxHeight
    */
   update({ input, maxWidth, maxHeight }) {
     // Set rotation in directionrees
-    if (input.left) {
+    if (input.left.isActive) {
       this.direction = (this.direction - 1 * rotationSpeed) % 360
     }
-    if (input.right) {
+    if (input.right.isActive) {
       this.direction = (this.direction + 1 * rotationSpeed) % 360
     }
 
     // Set velocity
-    if (input.accelerating) {
+    if (input.forward.isActive) {
       this.velocity = Math.min(maxForwardSpeed, this.velocity + acceleratePower)
-    } else if (input.braking) {
+    } else if (input.reverse.isActive) {
       this.velocity = Math.max(maxBackwardSpeed, this.velocity - brakePower)
     } else if (this.velocity > 0) {
       this.velocity = Math.max(0, this.velocity - drag)

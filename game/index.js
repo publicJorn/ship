@@ -8,7 +8,7 @@ import { ObjectX } from './ObjectX'
 // - remove all debug stuff from build
 //
 export const game = (canvas) => {
-  const debug = true
+  const debug = true // TODO: make global
   const ctx = canvas.getContext('2d')
   const scale = 4
 
@@ -16,9 +16,14 @@ export const game = (canvas) => {
   const bullets = new Set()
   const staticObjects = new Set()
 
-  const input1 = new Input({ debug })
-  input1.setKey({
-    input: 'fire',
+  const player1 = new Player()
+
+  player1.setInput(new Input({ player: player1 }))
+  player1.input.forward.set({ key: 'ArrowUp' })
+  player1.input.reverse.set({ key: 'ArrowDown' })
+  player1.input.left.set({ key: 'ArrowLeft' })
+  player1.input.right.set({ key: 'ArrowRight' })
+  player1.input.fire.set({
     key: ' ',
     callback: ({ player }) => {
       bullets.add(
@@ -34,10 +39,7 @@ export const game = (canvas) => {
     },
   })
 
-  const player1 = new Player()
-  input1.attachCallbacksArgs({ player: player1 })
-  player1.setInput(input1)
-  player1.createShip(
+  player1.setShip(
     new Ship({
       x: 400,
       y: 300,
@@ -46,6 +48,7 @@ export const game = (canvas) => {
       scale,
     })
   )
+
   players.set('player1', player1)
 
   staticObjects.add(new ObjectX({ x: 400, y: 150, scale }))
