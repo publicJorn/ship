@@ -1,14 +1,34 @@
+const minLightness = 50
+
 export class Player {
-  constructor() {
-    // TODO: new color function to automatically determine stroke based on fill input
-    this.color = { stroke: 'rgb(11, 162, 170)', fill: 'rgb(100, 202, 207)' }
-    this.input = null
-    this.ship = null
+  name = ''
+  color = { stroke: 'hsl(183, 53%, 40%)', fill: 'hsl(183, 53%, 60%)' }
+  input = null
+  ship = null
+
+  constructor({ name, debug = false }) {
+    this.name = name
+    this.setColor(183, 53, 60)
+    this.debug = debug
   }
 
-  setColor({ stroke, fill }) {
-    this.color.stroke = stroke
-    this.color.fill = fill
+  /**
+   *
+   * @param {number} hue
+   * @param {number} saturation
+   * @param {number} lightness
+   * @returns {string} error, if there is one
+   */
+  setColor(h, s, l) {
+    if (l < minLightness) {
+      const err = `Please choose a lighter colour (lightness minimum: ${minLightness}, given: ${l}).`
+      console.error(err)
+      return err
+    }
+
+    this.color.stroke = `hsl(${h}, ${s}%, ${l - 20}%)`
+    this.color.fill = `hsl(${h}, ${s}%, ${l}%)`
+    return ''
   }
 
   setInput(input) {

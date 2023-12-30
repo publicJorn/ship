@@ -59,18 +59,22 @@ export class Input {
 
   onKeydown(evt) {
     if (evt.key === this.forward.key && !this.forward.isActive) {
+      evt.preventDefault()
       this.forward.isActive = true
       if (this.debug) console.log('+forward')
     }
     if (evt.key === this.reverse.key && !this.reverse.isActive) {
+      evt.preventDefault()
       this.reverse.isActive = true
       if (this.debug) console.log('+reverse')
     }
     if (evt.key === this.left.key && !this.left.isActive) {
+      evt.preventDefault()
       this.left.isActive = true
       if (this.debug) console.log('+left')
     }
     if (evt.key === this.right.key && !this.right.isActive) {
+      evt.preventDefault()
       this.right.isActive = true
       if (this.debug) console.log('+right')
     }
@@ -78,18 +82,22 @@ export class Input {
 
   onKeyup(evt) {
     if (evt.key === this.forward.key && this.forward.isActive) {
+      evt.preventDefault()
       this.forward.isActive = false
       if (this.debug) console.log('-forward')
     }
     if (evt.key === this.reverse.key && this.reverse.isActive) {
+      evt.preventDefault()
       this.reverse.isActive = false
       if (this.debug) console.log('-reverse')
     }
     if (evt.key === this.left.key && this.left.isActive) {
+      evt.preventDefault()
       this.left.isActive = false
       if (this.debug) console.log('-left')
     }
     if (evt.key === this.right.key && this.right.isActive) {
+      evt.preventDefault()
       this.right.isActive = false
       if (this.debug) console.log('-right')
     }
@@ -97,6 +105,7 @@ export class Input {
 
   onKeypress(evt) {
     if (evt.key === this.fire.key) {
+      evt.preventDefault()
       this.fire.callback({ player: this.player })
     }
   }
