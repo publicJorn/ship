@@ -19,17 +19,33 @@ const rotationSpeed = 2
  * @param {string} fill
  */
 export class Ship extends MovingPhysical {
-  constructor({ direction = -90, stroke, fill, scale, ...props }) {
+  #health = 100
+  destroy = false
+
+  constructor({ direction = -90, stroke, fill, scale, player, ...props }) {
     super({ direction, scale, ...props })
 
     this.lineWidth = 1 * scale
     this.stroke = stroke
     this.fill = fill
+    this.player = player
 
     this.calcHitBoxBasicRadius({
       outerWidth: 8 * scale + this.lineWidth,
       outerHeight: 10 * scale + 2, // + stroke miter
     })
+
+    this.createDestructPieces()
+  }
+
+  damage(points) {
+    // TODO: health bar
+    // TODO: invulnerability after respawning
+    this.#health -= points
+
+    if (this.#health <= 0) {
+      this.destroy = true
+    }
   }
 
   /**
@@ -62,40 +78,72 @@ export class Ship extends MovingPhysical {
   }
 
   /**
-   * Draw to cnavas
-   * @param {2dContext} ctx
-   * @param {boolean} debug
+   * Draw to canvas
    */
-  draw({ ctx, debug = false }) {
+  draw() {
+    // TODO: do or do not draw 1 frame when destroyed?
     const rad = ((this.direction + 90) * Math.PI) / 180
 
-    ctx.save()
+    this.ctx.save()
 
-    ctx.translate(this.x, this.y)
-    ctx.rotate(rad)
+    this.ctx.translate(this.x, this.y)
+    this.ctx.rotate(rad)
 
-    ctx.beginPath()
-    ctx.moveTo(0, -5.5 * this.scale)
-    ctx.lineTo(-4 * this.scale, 4.5 * this.scale)
-    ctx.lineTo(4 * this.scale, 4.5 * this.scale)
-    ctx.closePath()
+    this.ctx.beginPath()
+    this.ctx.moveTo(0, -5.5 * this.scale)
+    this.ctx.lineTo(-4 * this.scale, 4.5 * this.scale)
+    this.ctx.lineTo(4 * this.scale, 4.5 * this.scale)
+    this.ctx.closePath()
 
-    ctx.lineWidth = this.lineWidth
-    ctx.strokeStyle = this.stroke
-    ctx.fillStyle = this.fill
+    this.ctx.lineWidth = this.lineWidth
+    this.ctx.strokeStyle = this.stroke
+    this.ctx.fillStyle = this.fill
 
-    ctx.fill()
-    ctx.stroke()
+    this.ctx.fill()
+    this.ctx.stroke()
 
-    if (debug) {
-      ctx.fillStyle = 'rgb(220, 20, 20)'
-      ctx.beginPath()
-      ctx.arc(0, 0, 3, 0, 2 * Math.PI)
-      ctx.fill()
+    if (window.debug) {
+      this.ctx.fillStyle = 'rgb(220, 20, 20)'
+      this.ctx.beginPath()
+      this.ctx.arc(0, 0, 3, 0, 2 * Math.PI)
+      this.ctx.fill()
     }
 
-    ctx.restore()
+    this.ctx.restore()
 
-    super.draw({ ctx, debug })
+    super.draw()
+  }
+
+  createDestructPieces() {
+    const s = (n) => n * this.scale
+
+    this.ctx.beginPath()
+    this.ctx.moveTo(0, s(-5))
+    this.ctx.lineTo(s(-2), 0)
+    this.ctx.lineTo(s(1), s(2))
+    this.ctx.lineTo(s(2), 0)
+    this.ctx.closePath()
+
+    this.ctx.beginPath()
+    this.ctx.moveTo(s(2), 0)
+    this.ctx.lineTo(s(1), s(2))
+    this.ctx.lineTo(s(-1), s(5))
+    this.ctx.lineTo(s(4), s(5))
+    this.ctx.closePath()
+
+    this.ctx.beginPath()
+    this.ctx.moveTo(s(-2), 0)
+    this.ctx.lineTo(s(-4), s(5))
+    this.ctx.lineTo(s(-1), s(5))
+    this.ctx.lineTo(s(1), s(2))
+    this.ctx.closePath()
+  }
+
+  getDebris() {
+    return {
+      x: this.x,
+      y: this.y,
+      pieces: [],
+    }
   }
 }

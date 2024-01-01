@@ -13,12 +13,16 @@ import { MovingPhysical } from './MovingPhysical'
  * @param {number} range
  */
 export class Bullet extends MovingPhysical {
+  moved = 0
+  destroy = false
+
   constructor({
     velocity = 5.5,
     size = 1.25,
     owner,
     color,
     range = 350,
+    damage = 100,
     scale,
     ...props
   }) {
@@ -30,8 +34,7 @@ export class Bullet extends MovingPhysical {
     this.owner = owner
     this.color = color
     this.range = range
-    this.moved = 0
-    this.delete = false
+    this.damage = damage
   }
 
   /**
@@ -44,27 +47,30 @@ export class Bullet extends MovingPhysical {
 
     // extra
     if (this.moved >= this.range) {
-      this.remove = true
+      this.destroy = true
     }
   }
 
   /**
    * Draw to cnavas
-   * @param {2dContext} ctx
-   * @param {boolean} debug
    */
-  draw({ ctx, debug = false }) {
+  draw() {
     const radius = this.size / 2
 
-    ctx.beginPath()
-    ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI)
-    ctx.fillStyle = this.color
-    ctx.fill()
+    this.ctx.beginPath()
+    this.ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI)
+    this.ctx.fillStyle = this.color
+    this.ctx.fill()
 
-    if (debug) {
-      ctx.strokeStyle = 'rgb(220, 20, 20)'
-      ctx.lineWidth = 1
-      ctx.strokeRect(this.x - radius, this.y - radius, this.width, this.height)
+    if (window.debug) {
+      this.ctx.strokeStyle = 'rgb(220, 20, 20)'
+      this.ctx.lineWidth = 1
+      this.ctx.strokeRect(
+        this.x - radius,
+        this.y - radius,
+        this.width,
+        this.height
+      )
     }
   }
 }

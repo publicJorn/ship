@@ -2,7 +2,13 @@ export class Physical {
   hitBoxBasicRadius = 0
   isColliding = false
 
-  constructor({ x, y, scale }) {
+  /**
+   * @param {2dContext} ctx
+   * @param {number} x
+   * @param {number} y
+   */
+  constructor({ ctx, x, y, scale }) {
+    this.ctx = ctx
     this.x = x
     this.y = y
     this.scale = scale
@@ -42,19 +48,18 @@ export class Physical {
     this.isColliding = false
   }
 
-  // TODO: for non-moving physical, investigate using another ctx that doesn't redraw each frame
-  draw({ ctx, debug = false }) {
-    if (debug) {
+  draw() {
+    if (window.debug) {
       // Hitbox basic
-      ctx.strokeStyle = this.isColliding
+      this.ctx.strokeStyle = this.isColliding
         ? 'rgb(220, 20, 20)'
         : 'rgb(260, 140, 20)'
-      ctx.lineWidth = 1
+      this.ctx.lineWidth = 1
 
-      ctx.beginPath()
-      ctx.arc(this.x, this.y, this.hitBoxBasicRadius, 0, Math.PI * 2)
-      ctx.closePath()
-      ctx.stroke()
+      this.ctx.beginPath()
+      this.ctx.arc(this.x, this.y, this.hitBoxBasicRadius, 0, Math.PI * 2)
+      this.ctx.closePath()
+      this.ctx.stroke()
     }
   }
 }

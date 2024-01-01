@@ -31,7 +31,7 @@ export class MovingPhysical extends Physical {
     this.y = y
   }
 
-  draw({ ctx, debug }) {
-    super.draw({ ctx, debug })
+  draw() {
+    super.draw()
   }
 }

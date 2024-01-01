@@ -6,10 +6,9 @@ export class Player {
   input = null
   ship = null
 
-  constructor({ name, debug = false }) {
+  constructor({ name }) {
     this.name = name
     this.setColor(183, 53, 60)
-    this.debug = debug
   }
 
   /**

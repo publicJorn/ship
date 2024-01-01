@@ -1,24 +1,27 @@
 import { Input } from './Input'
 import { Player } from './Player'
+import { Debris } from './Debris'
 import { Ship } from './Ship'
 import { Bullet } from './Bullet'
 import { ObjectX } from './ObjectX'
 
 // TODO: before prod
-// - remove all debug stuff from build
+// - destroy all debug stuff from build
 //
 export const game = (canvas) => {
-  const debug = true // TODO: make global
+  window.debug = true
+  // TODO: investigate multiple contexts, ie for non-moving objects. So they don't redraw each frame
   const ctx = canvas.getContext('2d')
   const scale = 4
 
   const players = new Set()
   const bullets = new Set()
+  const explosions = new Set()
   const staticObjects = new Set()
 
   // TODO: temp so it can be folded - input should be setup outside of index
   ;(function () {
-    const player1 = new Player({ name: 'Player 1', debug: true })
+    const player1 = new Player({ name: 'Player 1' })
     // player1.setColor(183, 53, 60)
     player1.setInput(new Input({ player: player1 }))
     player1.input.forward.set({ key: 'ArrowUp' })
@@ -30,6 +33,7 @@ export const game = (canvas) => {
       callback: ({ player }) => {
         bullets.add(
           new Bullet({
+            ctx,
             x: player.ship.x,
             y: player.ship.y,
             scale,
@@ -42,6 +46,7 @@ export const game = (canvas) => {
     })
     player1.setShip(
       new Ship({
+        ctx,
         x: 500,
         y: 300,
         stroke: player1.color.stroke,
@@ -51,7 +56,7 @@ export const game = (canvas) => {
     )
     players.add(player1)
 
-    const player2 = new Player({ name: 'Player 2', debug: true })
+    const player2 = new Player({ name: 'Player 2' })
     player2.setColor(102, 88, 50)
     player2.setInput(new Input({ player: player2 }))
     player2.input.forward.set({ key: 'w' })
@@ -63,6 +68,7 @@ export const game = (canvas) => {
       callback: ({ player }) => {
         bullets.add(
           new Bullet({
+            ctx,
             x: player.ship.x,
             y: player.ship.y,
             scale,
@@ -75,6 +81,7 @@ export const game = (canvas) => {
     })
     player2.setShip(
       new Ship({
+        ctx,
         x: 300,
         y: 300,
         stroke: player2.color.stroke,
@@ -85,7 +92,7 @@ export const game = (canvas) => {
     players.add(player2)
   })()
 
-  staticObjects.add(new ObjectX({ x: 400, y: 150, scale }))
+  staticObjects.add(new ObjectX({ ctx, x: 400, y: 150, scale }))
 
   // Input
   window.addEventListener('keydown', (evt) => {
@@ -101,7 +108,15 @@ export const game = (canvas) => {
   const loop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+    // Updates ---
     players.forEach((player) => {
+      if (player.ship.destroy) {
+        // TODO: add score, subtract lives, respawn after timer. All depends on game mode.
+        explosions.add(new Debris({ ctx, ...player.ship.getDebris() }))
+        // player.setShip(null)
+        // player.input.inert = true
+        players.delete(player)
+      }
       player.ship.update({
         input: player.input,
         maxWidth: canvas.width,
@@ -109,7 +124,7 @@ export const game = (canvas) => {
       })
     })
     bullets.forEach((bullet) => {
-      if (bullet.remove) {
+      if (bullet.destroy) {
         bullets.delete(bullet)
       }
       bullet.update({ maxWidth: canvas.width, maxHeight: canvas.height })
@@ -118,30 +133,45 @@ export const game = (canvas) => {
       obj.update()
     })
 
+    // Hit detection ---
     players.forEach((player) => {
       for (let obj of staticObjects) {
         if (player.ship.basicCollidesWith(obj)) {
           player.ship.isColliding = true
           obj.isColliding = true
         }
-        for (let p of players) {
-          if (p !== player && player.ship.basicCollidesWith(p.ship)) {
-            player.ship.isColliding = true
+
+        // TODO: ship-ship damage?
+        // for (let p of players) {
+        //   if (p !== player && player.ship.basicCollidesWith(p.ship)) {
+        //     player.ship.isColliding = true
+        //   }
+        // }
+
+        for (let b of bullets) {
+          if (b.owner !== player && player.ship.basicCollidesWith(b)) {
+            player.ship.damage(b.damage)
+            b.destroy = true
           }
         }
       }
     })
 
+    // Drawing ---
+    explosions.forEach((debris) => {
+      debris.draw()
+    })
     players.forEach((player) => {
-      player.ship.draw({ ctx, debug })
+      player.ship.draw()
     })
     bullets.forEach((bullet) => {
-      bullet.draw({ ctx, debug })
+      bullet.draw()
     })
     staticObjects.forEach((obj) => {
-      obj.draw({ ctx, debug })
+      obj.draw()
     })
 
+    // TODO: limit fps
     window.requestAnimationFrame(loop)
   }
 

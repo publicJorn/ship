@@ -14,33 +14,33 @@ export class ObjectX extends Physical {
     super.update()
   }
 
-  draw({ ctx, debug }) {
+  draw() {
     const s = (n) => n * this.scale
 
-    ctx.save()
-    ctx.translate(this.x, this.y)
+    this.ctx.save()
+    this.ctx.translate(this.x, this.y)
 
-    ctx.beginPath()
-    ctx.moveTo(s(-6), s(-4))
-    ctx.lineTo(s(-4), s(-6))
-    ctx.lineTo(s(0), s(-2))
-    ctx.lineTo(s(4), s(-6))
-    ctx.lineTo(s(6), s(-4))
-    ctx.lineTo(s(2), s(0))
-    ctx.lineTo(s(6), s(4))
-    ctx.lineTo(s(4), s(6))
-    ctx.lineTo(s(0), s(2))
-    ctx.lineTo(s(-4), s(6))
-    ctx.lineTo(s(-6), s(4))
-    ctx.lineTo(s(-2), s(0))
-    ctx.closePath()
+    this.ctx.beginPath()
+    this.ctx.moveTo(s(-6), s(-4))
+    this.ctx.lineTo(s(-4), s(-6))
+    this.ctx.lineTo(0, s(-2))
+    this.ctx.lineTo(s(4), s(-6))
+    this.ctx.lineTo(s(6), s(-4))
+    this.ctx.lineTo(s(2), 0)
+    this.ctx.lineTo(s(6), s(4))
+    this.ctx.lineTo(s(4), s(6))
+    this.ctx.lineTo(0, s(2))
+    this.ctx.lineTo(s(-4), s(6))
+    this.ctx.lineTo(s(-6), s(4))
+    this.ctx.lineTo(s(-2), 0)
+    this.ctx.closePath()
 
-    ctx.lineWidth = 2
-    ctx.strokeStyle = 'hotpink'
-    ctx.stroke()
+    this.ctx.lineWidth = 2
+    this.ctx.strokeStyle = 'hotpink'
+    this.ctx.stroke()
 
-    ctx.restore()
+    this.ctx.restore()
 
-    super.draw({ ctx, debug })
+    super.draw()
   }
 }
