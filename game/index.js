@@ -4,6 +4,7 @@ import { Debris } from './Debris'
 import { Ship } from './Ship'
 import { Bullet } from './Bullet'
 import { ObjectX } from './ObjectX'
+import { fpsTimer } from './fpsTimer'
 
 // TODO: before prod
 // - destroy all debug stuff from build
@@ -170,6 +171,9 @@ export const game = (canvas) => {
     staticObjects.forEach((obj) => {
       obj.draw()
     })
+
+    fpsTimer.update()
+    fpsTimer.draw(ctx)
 
     // TODO: limit fps
     window.requestAnimationFrame(loop)
