@@ -1,6 +1,6 @@
-import { Physical } from './Physical'
+import { Entity } from './Entity'
 
-export class MovingPhysical extends Physical {
+export class MovingEntity extends Entity {
   constructor({ direction = 0, velocity = 0, ...props }) {
     super(props)
 

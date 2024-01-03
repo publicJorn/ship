@@ -1,4 +1,4 @@
-export class Physical {
+export class Collider {
   hitBoxBasicRadius = 0
   isColliding = false
 
@@ -7,11 +7,10 @@ export class Physical {
    * @param {number} x
    * @param {number} y
    */
-  constructor({ ctx, x, y, scale }) {
+  constructor({ ctx, x, y }) {
     this.ctx = ctx
     this.x = x
     this.y = y
-    this.scale = scale
   }
 
   /**
@@ -26,25 +25,27 @@ export class Physical {
   }
 
   /**
-   * Check if it comes in range of another physical
-   * @param {Physical} physical
+   * Check if it comes in range of another collider
+   * @param {Collider} collider
    * @returns bool
    */
-  basicCollidesWith(physical) {
+  basicCollidesWith(collider) {
     const centerDistance =
-      Math.pow(this.x - physical.x, 2) + Math.pow(this.y - physical.y, 2)
+      Math.pow(this.x - collider.x, 2) + Math.pow(this.y - collider.y, 2)
 
     return (
       centerDistance <=
-      Math.pow(this.hitBoxBasicRadius + physical.hitBoxBasicRadius, 2)
+      Math.pow(this.hitBoxBasicRadius + collider.hitBoxBasicRadius, 2)
     )
   }
 
   calcHitBoxPrecise() {
-    this.calcHitBoxRect()
+    this.calcHitBoxBasicRadius()
   }
 
-  update() {
+  update({ x, y }) {
+    this.x = x
+    this.y = y
     this.isColliding = false
   }
 

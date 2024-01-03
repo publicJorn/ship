@@ -49,9 +49,9 @@ export const game = (canvas) => {
         ctx,
         x: 500,
         y: 300,
+        scale,
         stroke: player1.color.stroke,
         fill: player1.color.fill,
-        scale,
       })
     )
     players.add(player1)
@@ -84,15 +84,15 @@ export const game = (canvas) => {
         ctx,
         x: 300,
         y: 300,
+        scale,
         stroke: player2.color.stroke,
         fill: player2.color.fill,
-        scale,
       })
     )
     players.add(player2)
   })()
 
-  staticObjects.add(new ObjectX({ ctx, x: 400, y: 150, scale }))
+  // staticObjects.add(new ObjectX({ ctx, x: 400, y: 150, scale }))
 
   // Input
   window.addEventListener('keydown', (evt) => {

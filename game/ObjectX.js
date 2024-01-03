@@ -1,6 +1,7 @@
-import { Physical } from './Physical'
+import { MovingEntity } from './MovingEntity'
+import { Collider } from './Collider'
 
-export class ObjectX extends Physical {
+export class ObjectX extends MovingEntity {
   constructor(props) {
     super(props)
 

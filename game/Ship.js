@@ -1,4 +1,5 @@
-import { MovingPhysical } from './MovingPhysical'
+import { MovingEntity } from './MovingEntity'
+import { Collider } from './Collider'
 
 // Ship constants
 // Internalize when we get multiple ship types
@@ -18,7 +19,7 @@ const rotationSpeed = 2
  * @param {string} stroke
  * @param {string} fill
  */
-export class Ship extends MovingPhysical {
+export class Ship extends MovingEntity {
   #health = 100
   destroy = false
 
@@ -28,14 +29,16 @@ export class Ship extends MovingPhysical {
     this.lineWidth = 1 * scale
     this.stroke = stroke
     this.fill = fill
-    this.player = player
+    // this.player = player // TODO: remove circular reference
 
-    this.calcHitBoxBasicRadius({
+    this.collider = this.compose(new Collider({ scale, ...props }))
+
+    this.collider.calcHitBoxBasicRadius({
       outerWidth: 8 * scale + this.lineWidth,
       outerHeight: 10 * scale + 2, // + stroke miter
     })
 
-    this.createDestructPieces()
+    // this.createDestructPieces()
   }
 
   damage(points) {

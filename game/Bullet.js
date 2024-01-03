@@ -1,4 +1,4 @@
-import { MovingPhysical } from './MovingPhysical'
+import { MovingEntity } from './MovingEntity'
 
 /**
  * Bullet fired by a ship
@@ -12,7 +12,7 @@ import { MovingPhysical } from './MovingPhysical'
  * @param {number} velocity
  * @param {number} range
  */
-export class Bullet extends MovingPhysical {
+export class Bullet extends MovingEntity {
   moved = 0
   destroy = false
 
