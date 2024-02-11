@@ -1,5 +1,8 @@
 import { Entity } from './Entity'
 
+// I could refactor this to an entity enhancer.
+// But it kind of feels basic enough to extend instead. Also because it changes base attributes (x,y).
+// Let's see how it plays out like this.
 export class MovingEntity extends Entity {
   constructor({ direction = 0, velocity = 0, ...props }) {
     super(props)

@@ -1,5 +1,5 @@
-import { Entity } from './Entity'
-import { Collider } from './Collider'
+import { Entity } from './framework/Entity'
+import { Collider } from './framework/entityEnhancers/Collider'
 
 export class ObjectX extends Entity {
   constructor(props) {

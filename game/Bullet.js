@@ -1,5 +1,5 @@
-import { MovingEntity } from './MovingEntity'
-import { Collider } from './Collider'
+import { MovingEntity } from './framework/MovingEntity'
+import { Collider } from './framework/entityEnhancers/Collider'
 
 /**
  * Bullet fired by a ship

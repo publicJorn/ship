@@ -1,10 +1,10 @@
-import { Input } from './Input'
+import { Input } from './framework/Input'
 import { Player } from './Player'
 import { Debris } from './Debris'
 import { Ship } from './Ship'
 import { Bullet } from './Bullet'
 import { ObjectX } from './ObjectX'
-import { fpsTimer } from './fpsTimer'
+import { fpsTimer } from './framework/fpsTimer'
 
 // TODO: before prod
 // - destroy all debug stuff from build
@@ -20,7 +20,8 @@ export const game = (canvas) => {
   const explosions = new Set()
   const staticObjects = new Set()
 
-  // TODO: temp so it can be folded - input should be setup outside of index
+  // TODO: temp so it can be folded - input should be setup outside of main game code
+  // maybe work with "scenes", like Phaser does?
   ;(function () {
     const player1 = new Player({ name: 'Player 1' })
     // player1.setColor(183, 53, 60)
