@@ -14,7 +14,6 @@ const rotationSpeed = 2
  * Player controlled ship
  * @param {number} x
  * @param {number} y
- * @param {string} color
  * @param {number} direction in degrees
  * @param {string} stroke
  * @param {string} fill
@@ -31,12 +30,14 @@ export class Ship extends MovingEntity {
     this.fill = fill
     // this.player = player // TODO: remove circular reference
 
-    this.collider = this.compose(new Collider({ scale, ...props }))
-
-    this.collider.calcHitBoxBasicRadius({
-      outerWidth: 8 * scale + this.lineWidth,
-      outerHeight: 10 * scale + 2, // + stroke miter
-    })
+    this.collider = this.compose(
+      new Collider({
+        ctx: props.ctx,
+        entityRef: this,
+        outerWidth: 8 * scale + this.lineWidth,
+        outerHeight: 10 * scale + 2, // + stroke miter
+      })
+    )
 
     // this.createDestructPieces()
   }

@@ -1,14 +1,18 @@
-import { MovingEntity } from './MovingEntity'
+import { Entity } from './Entity'
 import { Collider } from './Collider'
 
-export class ObjectX extends MovingEntity {
+export class ObjectX extends Entity {
   constructor(props) {
     super(props)
 
-    this.calcHitBoxBasicRadius({
-      outerWidth: 10.5 * props.scale,
-      outerHeight: 10.5 * props.scale,
-    })
+    this.collider = this.compose(
+      new Collider({
+        ctx: props.ctx,
+        entityRef: this,
+        outerWidth: 10.5 * props.scale,
+        outerHeight: 10.5 * props.scale,
+      })
+    )
   }
 
   update() {

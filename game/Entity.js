@@ -1,8 +1,6 @@
 export class Entity {
   #properties = []
 
-  // TODO: Think about a register function for properties like `Collider`
-  // When registered the "interface" functions would run automatically from here
   constructor({ ctx, x, y, scale }) {
     this.ctx = ctx
     this.x = x
@@ -18,7 +16,7 @@ export class Entity {
   update(props) {
     this.#properties.forEach((p) => {
       if (p.update instanceof Function) {
-        p.update({ ...this, ...props })
+        p.update(props)
       }
     })
   }
@@ -26,7 +24,7 @@ export class Entity {
   draw(props) {
     this.#properties.forEach((p) => {
       if (p.draw instanceof Function) {
-        p.draw({ ...this, ...props })
+        p.draw(props)
       }
     })
   }

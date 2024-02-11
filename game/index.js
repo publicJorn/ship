@@ -93,7 +93,7 @@ export const game = (canvas) => {
     players.add(player2)
   })()
 
-  // staticObjects.add(new ObjectX({ ctx, x: 400, y: 150, scale }))
+  staticObjects.add(new ObjectX({ ctx, x: 400, y: 150, scale }))
 
   // Input
   window.addEventListener('keydown', (evt) => {
@@ -137,20 +137,26 @@ export const game = (canvas) => {
     // Hit detection ---
     players.forEach((player) => {
       for (let obj of staticObjects) {
-        if (player.ship.basicCollidesWith(obj)) {
-          player.ship.isColliding = true
-          obj.isColliding = true
+        if (player.ship.collider.basicCollidesWith(obj.collider)) {
+          player.ship.collider.isColliding = true
+          obj.collider.isColliding = true
         }
 
         // TODO: ship-ship damage?
-        // for (let p of players) {
-        //   if (p !== player && player.ship.basicCollidesWith(p.ship)) {
-        //     player.ship.isColliding = true
-        //   }
-        // }
+        for (let p of players) {
+          if (
+            p !== player &&
+            player.ship.collider.basicCollidesWith(p.ship.collider)
+          ) {
+            player.ship.collider.isColliding = true
+          }
+        }
 
         for (let b of bullets) {
-          if (b.owner !== player && player.ship.basicCollidesWith(b)) {
+          if (
+            b.owner !== player &&
+            player.ship.collider.basicCollidesWith(b.collider)
+          ) {
             player.ship.damage(b.damage)
             b.destroy = true
           }

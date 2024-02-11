@@ -1,4 +1,5 @@
 import { MovingEntity } from './MovingEntity'
+import { Collider } from './Collider'
 
 /**
  * Bullet fired by a ship
@@ -26,15 +27,22 @@ export class Bullet extends MovingEntity {
     scale,
     ...props
   }) {
-    const square = size * scale * 2
+    super({ velocity, ...props })
 
-    super({ velocity, width: square, height: square, ...props })
-
-    this.size = square
+    this.size = size * scale * 2
     this.owner = owner
     this.color = color
     this.range = range
     this.damage = damage
+
+    this.collider = this.compose(
+      new Collider({
+        ctx: props.ctx,
+        entityRef: this,
+        outerWidth: this.size,
+        outerHeight: this.size,
+      })
+    )
   }
 
   /**
