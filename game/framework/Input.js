@@ -1,52 +1,23 @@
-class Key {
-  name = ''
-  isActive = false
-  key = ''
-  callback = null
-  requiresCallback = false
-
-  constructor({ name, requiresCallback = false }) {
-    this.name = name
-    this.requiresCallback = requiresCallback
-  }
-
-  isReady() {
-    if (!this.key) return false
-    if (this.requiresCallback && !this.callback) {
-      if (window.debug) {
-        console.error(
-          `Key [${this.name}] is set without callback, but requires one.`
-        )
-      }
-      return false
-    }
-    return true
-  }
-
-  set({ key, callback = null }) {
-    this.key = key
-
-    if (callback !== null) {
-      this.callback = callback
-    }
-  }
-}
+import { Key } from './Key'
 
 /**
  * Maps keys to inport properties
  * Input interface is implemented in Player and Ship
  */
 export class Input {
+  forward
+  reverse
+  left
+  right
+  fire
   inert = false
 
-  constructor({ player }) {
+  constructor() {
     this.forward = new Key({ name: 'Forward' })
     this.reverse = new Key({ name: 'Reverse' })
     this.left = new Key({ name: 'Left' })
     this.right = new Key({ name: 'Right' })
     this.fire = new Key({ name: 'Fire', requiresCallback: true })
-
-    this.player = player
   }
 
   isReady() {
@@ -110,7 +81,7 @@ export class Input {
 
     if (evt.key === this.fire.key) {
       evt.preventDefault()
-      this.fire.callback({ player: this.player })
+      this.fire.callback()
     }
   }
 }

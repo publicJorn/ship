@@ -1,9 +1,20 @@
+import { Input } from './framework/Input'
+import { Ship } from './Ship'
+
 const minLightness = 50
 
 export class Player {
   name = ''
   color = { stroke: 'hsl(183, 53%, 40%)', fill: 'hsl(183, 53%, 60%)' }
+  /**
+   * @type {Input} input
+   * @public
+   */
   input = null
+  /**
+   * @type {Ship} ship
+   * @public
+   */
   ship = null
 
   constructor({ name }) {
@@ -30,10 +41,16 @@ export class Player {
     return ''
   }
 
+  /**
+   * @param {Input} input
+   */
   setInput(input) {
     this.input = input
   }
 
+  /**
+   * @param {Ship} ship
+   */
   setShip(ship) {
     this.ship = ship
   }

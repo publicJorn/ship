@@ -25,23 +25,23 @@ export const game = (canvas) => {
   ;(function () {
     const player1 = new Player({ name: 'Player 1' })
     // player1.setColor(183, 53, 60)
-    player1.setInput(new Input({ player: player1 }))
+    player1.setInput(new Input())
     player1.input.forward.set({ key: 'ArrowUp' })
     player1.input.reverse.set({ key: 'ArrowDown' })
     player1.input.left.set({ key: 'ArrowLeft' })
     player1.input.right.set({ key: 'ArrowRight' })
     player1.input.fire.set({
       key: '/',
-      callback: ({ player }) => {
+      callback: () => {
         bullets.add(
           new Bullet({
             ctx,
-            x: player.ship.x,
-            y: player.ship.y,
+            x: player1.ship.x,
+            y: player1.ship.y,
             scale,
-            color: player.color.stroke,
-            direction: player.ship.direction,
-            owner: player,
+            color: player1.color.stroke,
+            direction: player1.ship.direction,
+            owner: player1,
           })
         )
       },
@@ -60,23 +60,23 @@ export const game = (canvas) => {
 
     const player2 = new Player({ name: 'Player 2' })
     player2.setColor(102, 88, 50)
-    player2.setInput(new Input({ player: player2 }))
+    player2.setInput(new Input())
     player2.input.forward.set({ key: 'w' })
     player2.input.reverse.set({ key: 's' })
     player2.input.left.set({ key: 'a' })
     player2.input.right.set({ key: 'd' })
     player2.input.fire.set({
       key: 'q',
-      callback: ({ player }) => {
+      callback: () => {
         bullets.add(
           new Bullet({
             ctx,
-            x: player.ship.x,
-            y: player.ship.y,
+            x: player2.ship.x,
+            y: player2.ship.y,
             scale,
-            color: player.color.stroke,
-            direction: player.ship.direction,
-            owner: player,
+            color: player2.color.stroke,
+            direction: player2.ship.direction,
+            owner: player2,
           })
         )
       },
