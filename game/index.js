@@ -142,25 +142,25 @@ export const game = (canvas) => {
           player.ship.collider.isColliding = true
           obj.collider.isColliding = true
         }
+      }
 
-        // TODO: ship-ship damage?
-        for (let p of players) {
-          if (
-            p !== player &&
-            player.ship.collider.basicCollidesWith(p.ship.collider)
-          ) {
-            player.ship.collider.isColliding = true
-          }
+      // TODO: ship-ship damage?
+      for (let p of players) {
+        if (
+          p !== player &&
+          player.ship.collider.basicCollidesWith(p.ship.collider)
+        ) {
+          player.ship.collider.isColliding = true
         }
+      }
 
-        for (let b of bullets) {
-          if (
-            b.owner !== player &&
-            player.ship.collider.basicCollidesWith(b.collider)
-          ) {
-            player.ship.damage(b.damage)
-            b.destroy = true
-          }
+      for (let b of bullets) {
+        if (
+          b.owner !== player &&
+          player.ship.collider.basicCollidesWith(b.collider)
+        ) {
+          player.ship.damage(b.damage)
+          b.destroy = true
         }
       }
     })
